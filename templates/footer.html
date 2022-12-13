@@ -1,0 +1,62 @@
+<!-- Footer -->
+<footer class="page-footer font-small special-color-dark pt-4">
+  <!-- Footer Elements -->
+  <div class="container">
+
+    <!-- Call to action -->
+    <!--
+    TODO: make use of the footer.
+    <ul class="list-unstyled list-inline text-center py-2">
+      <li class="list-inline-item">
+        <h5 class="mb-1">Footer</h5>
+      </li>
+    </ul>
+    -->
+    <!-- Call to action -->
+
+  </div>
+  <!-- Footer Elements -->
+  <div class="footer-copyright text-center py-3">
+    <p>
+      <em>
+        Disclaimer: Vulncode-DB is not an officially supported Google product.
+      </em>
+      <em>
+        <b><a href="{{ url_for('auth.terms', text=True) }}">Terms of Use</a></b><br />
+      </em>
+      <em>
+        See the <a href="https://github.com/google/vulncode-db/blob/master/README.md">vulncode-db repository</a> for more information.
+      </em>
+    </p>
+    {% include 'footer_addon.html' ignore missing %}
+  </div>
+</footer>
+<!-- Footer -->
+{% if vulnerability_details %}
+<script>
+  const EDITOR_SETTINGS = {{ vulnerability_details.get_settings()|tojson }};
+  window.EDITOR_SETTINGS = EDITOR_SETTINGS;
+  {% if g.user %}
+  const CURRENT_USER = {{ g.user.to_json()|tojson}};
+  window.CURRENT_USER = CURRENT_USER;
+  {% endif %}
+</script>
+{% endif %}
+
+<script src="{{ url_for('frontend.serve_static', path='js/main.js') }}" type="module" crossorigin></script>
+<script src="{{ url_for('frontend.serve_static', path='js/third_party/popper.min.js') }}"></script>
+
+<script src="{{ url_for('frontend.serve_static', path='js/third_party/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('frontend.serve_static', path='js/third_party/mdb.min.js') }}"></script>
+
+<!-- load monaco after all the other scripts to avoid issues with AMD defines -->
+<script src="{{ url_for('frontend.serve_static', path='monaco/min/vs/loader.js') }}"></script>
+<script>
+ require.config(
+    {paths: {'vs': "{{ url_for('frontend.serve_static', path='monaco/min/vs') }}"}});
+</script>
+
+{# TODO: This is currently disabled. Enable it again once it becomes useful.
+  <script src="{{ url_for('frontend.serve_static', path='js/tutorial.js') }}" type="module"></script>
+  <link rel="stylesheet" href="{{ url_for('frontend.serve_static', path='css/tutorial.css') }}">
+#}

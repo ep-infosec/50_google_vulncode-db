@@ -1,0 +1,56 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% from 'macros/generate_vuln_table.html' import display_vuln_column %}
+
+{% extends "base.html" %}
+
+
+{% block main_content %}
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <h2 class="text-center">{{ user.name }}'s Profile</h2>
+    </div>
+</div>
+<div class="row my-3">
+    <div class="col-sm-8 offset-md-2">
+        <div class="card my-3">
+            <div class="card-body">
+              <!-- the 90s called, they want their tables back -->
+              <div class="table-responsive">
+                <table class="table table-borderless table-hover">
+                  <tr>
+                    <th style="width: 10%">Name:</th>
+                    <td>{{ user.name }}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+        </div>
+    </div>
+    {% if user.avatar %}
+    <div class="col-sm-2 d-flex justify-content-center">
+        <div class="card my-3">
+            <div class="card-body">
+              <img src="{{ user.avatar_resized(96) }}" alt="profile picture" class="img-thumbnail avatar_profile">
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+<div class="row my-3">
+    <div class="col-sm-8 offset-md-2">
+        <div class="card my-3">
+            <div class="card-body">
+                <h3 class="card-title">Contributions</h3>
+                <ul>
+                {%- for vuln in vulns %}
+                  <li>
+                    <a href="{{ url_for('vuln.vuln_view', vcdb_id=vuln.cve_id) }}">{{ vuln.cve_id }}</a>
+                    ({{ display_vuln_column(vuln, 'state') }})
+                  </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}
